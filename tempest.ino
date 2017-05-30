@@ -215,20 +215,20 @@ bool checkEEPROM() {
 uint16_t readEEPROM() {
   uint8_t low = EEPROM.read(5);
   uint8_t high = EEPROM.read(6);
-  return (uint16_t)low + (uint16_t)(high >> 8);
+  return (uint16_t)low + (uint16_t)(high << 8);
 }
 
 // break score up into two bytes and save to EEPROM
 void writeEEPROM(uint16_t score) {
   uint8_t low = score;
-  uint8_t high = score << 8;
+  uint8_t high = score >> 8;
   EEPROM.write(0, 'T');
   EEPROM.write(1, 'M');
   EEPROM.write(2, 'P');
   EEPROM.write(3, 'S');
   EEPROM.write(4, 'T');
   EEPROM.write(5, low);
-  EEPROM.write(6, low);
+  EEPROM.write(6, high);
 }
 
 // LEFT and RIGHT move the ship, and there's a "speedup" effect, see updatePos
