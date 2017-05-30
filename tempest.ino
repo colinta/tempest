@@ -360,21 +360,21 @@ void drawPlayer() {
 void drawBullets(bool update) {
   for ( int bulletIndex = 0 ; bulletIndex < MAX_BULLETS ; bulletIndex++ ) {
     Bullet *bullet = &bullets[bulletIndex];
-    if ( !(*bullet).isActive ) { continue; }
+    if ( !bullet->isActive ) { continue; }
 
     if ( update ) {
-      (*bullet).r -= TICK;
-      (*bullet).x = CX(0.5 + RX * (*bullet).r * cos((*bullet).deg));
-      (*bullet).y = CY(0.5 + RY * (*bullet).r * sin((*bullet).deg));
+      bullet->r -= TICK;
+      bullet->x = CX(0.5 + RX * bullet->r * cos(bullet->deg));
+      bullet->y = CY(0.5 + RY * bullet->r * sin(bullet->deg));
 
-      float dist = pow((*bullet).x - CX(0), 2) + pow((*bullet).y - CY(0), 2);
+      float dist = pow(bullet->x - CX(0), 2) + pow(bullet->y - CY(0), 2);
 
       if ( dist < SMALL_R * SMALL_R ) {
-        (*bullet).isActive = false;
+        bullet->isActive = false;
       }
     }
 
-    arduboy.drawPixel((*bullet).x, (*bullet).y, 1);
+    arduboy.drawPixel(bullet->x, bullet->y, 1);
   }
 }
 
@@ -384,22 +384,22 @@ void drawBullets(bool update) {
 void drawEnemies(bool update) {
   for ( int enemyIndex = 0 ; enemyIndex < MAX_ENEMIES ; enemyIndex++ ) {
     Enemy *enemy = &enemies[enemyIndex];
-    if ( !(*enemy).isActive ) { continue; }
+    if ( !enemy->isActive ) { continue; }
 
     if ( update ) {
-      (*enemy).r += 0.4 * TICK;
-      (*enemy).x = CX(0.5 + RX * (*enemy).r * cos((*enemy).deg));
-      (*enemy).y = CY(0.5 + RY * (*enemy).r * sin((*enemy).deg));
+      enemy->r += 0.4 * TICK;
+      enemy->x = CX(0.5 + RX * enemy->r * cos(enemy->deg));
+      enemy->y = CY(0.5 + RY * enemy->r * sin(enemy->deg));
 
-      if ( (*enemy).x <= 1 || (*enemy).x >= WIDTH - 2 || (*enemy).y <= 1 || (*enemy).y >= HEIGHT - 2 ) {
+      if ( enemy->x <= 1 || enemy->x >= WIDTH - 2 || enemy->y <= 1 || enemy->y >= HEIGHT - 2 ) {
         game.state = State_died;
       }
     }
 
-    arduboy.drawPixel((*enemy).x + 1, (*enemy).y, 1);
-    arduboy.drawPixel((*enemy).x - 1, (*enemy).y, 1);
-    arduboy.drawPixel((*enemy).x, (*enemy).y + 1, 1);
-    arduboy.drawPixel((*enemy).x, (*enemy).y - 1, 1);
+    arduboy.drawPixel(enemy->x + 1, enemy->y, 1);
+    arduboy.drawPixel(enemy->x - 1, enemy->y, 1);
+    arduboy.drawPixel(enemy->x, enemy->y + 1, 1);
+    arduboy.drawPixel(enemy->x, enemy->y - 1, 1);
   }
 }
 
@@ -407,19 +407,19 @@ void drawEnemies(bool update) {
 void checkCollisions() {
   for ( int enemyIndex = 0 ; enemyIndex < MAX_ENEMIES ; enemyIndex++ ) {
     Enemy *enemy = &enemies[enemyIndex];
-    if ( !(*enemy).isActive ) { continue; }
+    if ( !enemy->isActive ) { continue; }
 
     for ( int bulletIndex = 0 ; bulletIndex < MAX_BULLETS ; bulletIndex++ ) {
       Bullet *bullet = &bullets[bulletIndex];
-      if ( !(*bullet).isActive ) { continue; }
+      if ( !bullet->isActive ) { continue; }
 
-      int bulletX = (*bullet).x;
-      int bulletY = (*bullet).y;
-      int enemyX = (*enemy).x;
-      int enemyY = (*enemy).y;
+      int bulletX = bullet->x;
+      int bulletY = bullet->y;
+      int enemyX = enemy->x;
+      int enemyY = enemy->y;
       if ( abs(enemyX - bulletX) <= 2 && abs(enemyY - bulletY) <= 2 ) {
-        (*bullet).isActive = false;
-        (*enemy).isActive = false;
+        bullet->isActive = false;
+        enemy->isActive = false;
         player.score += 1;
         sound.tone(100+random(200), 10, 100+random(200), 10, 100+random(200), 10);
       }
