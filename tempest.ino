@@ -222,13 +222,13 @@ uint16_t readEEPROM() {
 void writeEEPROM(uint16_t score) {
   uint8_t low = score;
   uint8_t high = score >> 8;
-  EEPROM.write(0, 'T');
-  EEPROM.write(1, 'M');
-  EEPROM.write(2, 'P');
-  EEPROM.write(3, 'S');
-  EEPROM.write(4, 'T');
-  EEPROM.write(5, low);
-  EEPROM.write(6, high);
+  EEPROM.update(0, 'T');
+  EEPROM.update(1, 'M');
+  EEPROM.update(2, 'P');
+  EEPROM.update(3, 'S');
+  EEPROM.update(4, 'T');
+  EEPROM.update(5, low);
+  EEPROM.update(6, high);
 }
 
 // LEFT and RIGHT move the ship, and there's a "speedup" effect, see updatePos
